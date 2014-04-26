@@ -41,7 +41,7 @@ define( 'CUBIFY_WP_URL', plugin_dir_url( __FILE__ ) );
 define( 'CUBIFY_WP_PATH', dirname( __FILE__ ) . '/' );
 
 
-class Cubify_Wp {
+class Cubify_WP {
 
 	const VERSION = '0.1.0';
 
@@ -52,28 +52,14 @@ class Cubify_Wp {
 	public function __construct() {
 	}
 
+	/**
+	 * Hold our hooks initiations
+	 * @since  0.1.0
+	 */
 	public function hooks() {
-
-		register_activation_hook( __FILE__, array( $this, '_activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, '_deactivate' ) );
 		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
-	}
-
-	/**
-	 * Activate the plugin
-	 */
-	function _activate() {
-		// Make sure any rewrite functionality has been loaded
-		flush_rewrite_rules();
-	}
-
-	/**
-	 * Deactivate the plugin
-	 * Uninstall routines should be in uninstall.php
-	 */
-	function _deactivate() {
-
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_js' ) );
+		add_shortcode( 'cubify', array( $this, 'shortcode' ) );
 	}
 
 	/**
@@ -85,19 +71,58 @@ class Cubify_Wp {
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'cubify_wp' );
 		load_textdomain( 'cubify_wp', WP_LANG_DIR . '/cubify_wp/cubify_wp-' . $locale . '.mo' );
 		load_plugin_textdomain( 'cubify_wp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
 	}
 
 	/**
-	 * Hooks for the Admin
+	 * Register JS handlers
 	 * @since  0.1.0
-	 * @return null
 	 */
-	public function admin_init() {
+	public function register_js() {
+		// Use minified?
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
+
+		wp_register_script( 'threejs', THREEJS_URL . 'assets/js/vendor/three.min.js', array( 'threejs' ), ThreeJS::VERSION );
+		wp_register_script( 'cubify', THREEJS_URL . "assets/js/cubify-wp$min.js", array( 'threejs', 'jquery' ), ThreeJS::VERSION );
+	}
+
+	/**
+	 * Shortcode handler for cubify
+	 * @since  0.1.0
+	 * @param  array  $atts Shortcode attributes
+	 * @return string       Shortcode markup
+	 */
+	public function shortcode( $atts = array() ) {
+		wp_enqueue_script( 'cubify' );
+
+		// Parse the attributes passed in (if any)
+		$atts = shortcode_atts( array(
+			'img'     => '',
+			'color'   => 'ffffff',
+			'speed'   => 1,
+			'size'    => '100%',
+			'class'   => 'alignleft',
+			'texture' => '',
+		), $atts, 'cubify' );
+
+		// class will not be a data attribute, so separate it out.
+		$class = $atts['class'];
+		unset( $atts['class'] );
+
+		// loop through the attributes and create them as data attributes
+		$data_attributes = '';
+		foreach ( $args as $key => $value ) {
+			$data_attributes .= sprintf( ' data-%1$s="%2$s"', sanitize_title( $key ), esc_attr( $value ) );
+		}
+
+		// build our container and send it back
+		return sprintf( '<div class="cubify-wp %1$s" %2$s></div>', sanitize_html_class( $class ), $data_attributes );
+
 	}
 
 }
 
 // init our class
-$Cubify_Wp = new Cubify_Wp();
-$Cubify_Wp->hooks();
-
+$Cubify_WP = new Cubify_WP();
+// And our hooks
+$Cubify_WP->hooks();
