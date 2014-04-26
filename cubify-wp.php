@@ -82,8 +82,8 @@ class Cubify_WP {
 		// Use minified?
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
 
-		wp_register_script( 'threejs', THREEJS_URL . 'assets/js/vendor/three.min.js', array( 'threejs' ), ThreeJS::VERSION );
-		wp_register_script( 'cubify', THREEJS_URL . "assets/js/cubify-wp$min.js", array( 'threejs', 'jquery' ), ThreeJS::VERSION );
+		wp_register_script( 'threejs', CUBIFY_WP_URL . 'assets/js/vendor/three.min.js', array( 'threejs' ), Cubify_WP::VERSION );
+		wp_register_script( 'cubify', CUBIFY_WP_URL . "assets/js/cubify-wp$min.js", array( 'threejs', 'jquery' ), Cubify_WP::VERSION );
 	}
 
 	/**

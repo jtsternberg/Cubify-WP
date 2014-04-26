@@ -41,7 +41,7 @@ module.exports = function( grunt ) {
 					exports : true,
 					module  : false
 				},
-				predef  :['document','window','THREE','console','jQuery']
+				predef  :['document','window','THREE','console','jQuery','requestAnimationFrame']
 			}
 		},
 		uglify: {
