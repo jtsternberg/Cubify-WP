@@ -56,9 +56,7 @@ class Cubify_WP {
 		'img'        => '',
 		'color'      => '#ffffff',
 		'speed'      => 1,
-		'size'       => '100%',
 		'class'      => 'alignleft',
-		'texture'    => '',
 		'percentage' => '100',
 	);
 
