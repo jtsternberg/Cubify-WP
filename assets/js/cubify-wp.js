@@ -63,6 +63,10 @@ window.Cubify_WP = (function(window, document, $, undefined){
 				_3d.cubeMaterial.color = new THREE.Color( data.color );
 			}
 
+			if ( data.speed ) {
+				_3d.speed = data.speed;
+			}
+
 		};
 
 		_3d.setupScene = function() {
@@ -80,8 +84,8 @@ window.Cubify_WP = (function(window, document, $, undefined){
 		};
 
 		_3d.update = function() {
-			_3d.cube.rotation.y += 0.01;
-			_3d.cube.rotation.x += 0.01;
+			_3d.cube.rotation.y += 0.01 * _3d.speed;
+			_3d.cube.rotation.x += 0.01 * _3d.speed;
 
 			requestAnimationFrame( _3d.update );
 			_3d.renderer.render( _3d.scene, _3d.camera );
