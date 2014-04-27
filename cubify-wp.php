@@ -43,14 +43,24 @@ define( 'CUBIFY_WP_PATH', dirname( __FILE__ ) . '/' );
 
 class Cubify_WP {
 
+	/**
+	 * Plugin Version
+	 */
 	const VERSION = '0.1.0';
 
 	/**
-	 * Sets up our plugin
-	 * @since  0.1.0
+	 * Cubify shortcode defaults
+	 * @var array
 	 */
-	public function __construct() {
-	}
+	public $shortcode_defaults = array(
+		'img'        => '',
+		'color'      => '#ffffff',
+		'speed'      => 1,
+		'size'       => '100%',
+		'class'      => 'alignleft',
+		'texture'    => '',
+		'percentage' => '100',
+	);
 
 	/**
 	 * Hold our hooks initiations
@@ -71,7 +81,6 @@ class Cubify_WP {
 		$locale = apply_filters( 'plugin_locale', get_locale(), 'cubify_wp' );
 		load_textdomain( 'cubify_wp', WP_LANG_DIR . '/cubify_wp/cubify_wp-' . $locale . '.mo' );
 		load_plugin_textdomain( 'cubify_wp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-
 	}
 
 	/**
@@ -82,8 +91,8 @@ class Cubify_WP {
 		// Use minified?
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
 
-		wp_register_script( 'threejs', CUBIFY_WP_URL . 'assets/js/vendor/three.min.js', array( 'threejs' ), Cubify_WP::VERSION );
-		wp_register_script( 'cubify', CUBIFY_WP_URL . "assets/js/cubify-wp$min.js", array( 'threejs', 'jquery' ), Cubify_WP::VERSION );
+		wp_register_script( 'threejs', CUBIFY_WP_URL . 'assets/js/vendor/three.min.js', array(), Cubify_WP::VERSION );
+		wp_register_script( 'cubify', CUBIFY_WP_URL . "assets/js/cubify-wp$min.js", array( 'threejs', 'jquery' ), Cubify_WP::VERSION, true );
 	}
 
 	/**
@@ -93,31 +102,34 @@ class Cubify_WP {
 	 * @return string       Shortcode markup
 	 */
 	public function shortcode( $atts = array() ) {
+		// Ensure cubify scripts are enqueued
 		wp_enqueue_script( 'cubify' );
 
 		// Parse the attributes passed in (if any)
-		$atts = shortcode_atts( array(
-			'img'     => '',
-			'color'   => 'ffffff',
-			'speed'   => 1,
-			'size'    => '100%',
-			'class'   => 'alignleft',
-			'texture' => '',
-		), $atts, 'cubify' );
+		$atts = shortcode_atts( $this->shortcode_defaults, $atts, 'cubify' );
 
-		// class will not be a data attribute, so separate it out.
-		$class = $atts['class'];
+		// build our container and send it back
+		return sprintf( '<p class="cubify-wp %1$s" %2$s></p>', sanitize_html_class( $atts['class'] ), $this->concat_data_attributes( $atts ) );
+
+	}
+
+	/**
+	 * Create data attributes from shortcode arguments
+	 * @since  0.1.0
+	 * @param  array  $atts Shortcode arguments
+	 * @return string       String of data attributes
+	 */
+	public function concat_data_attributes( $atts ) {
+
+		// class will not be a data attribute, so remove it.
 		unset( $atts['class'] );
 
 		// loop through the attributes and create them as data attributes
-		$data_attributes = '';
-		foreach ( $args as $key => $value ) {
-			$data_attributes .= sprintf( ' data-%1$s="%2$s"', sanitize_title( $key ), esc_attr( $value ) );
+		$cancatenated_attributes = '';
+		foreach ( $atts as $key => $value ) {
+			$cancatenated_attributes .= sprintf( ' data-%1$s="%2$s"', sanitize_title( $key ), esc_attr( $value ) );
 		}
-
-		// build our container and send it back
-		return sprintf( '<div class="cubify-wp %1$s" %2$s></div>', sanitize_html_class( $class ), $data_attributes );
-
+		return $cancatenated_attributes;
 	}
 
 }

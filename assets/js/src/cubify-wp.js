@@ -32,65 +32,94 @@ window.Cubify_WP = (function(window, document, $, undefined){
 		app.cubify();
 	};
 
+
 	app.cubify = function() {
+		var $cube, w;
+		// Loop shortcode instances
 		_$.cubes.each( function() {
-			new app.m3d( $(this) );
+			$cube = $(this);
+			// get percentage attribute
+			var percentage = $cube.data( 'percentage' );
+			// calculate width
+			w = Math.round( ( $cube.parent().width() * percentage ) / 100 );
+			// Set cube width/height
+			$cube.width( w );
+			$cube.height( w );
+			// Init threejs 3d object
+			new app._3d( $cube, w );
 		});
 	};
 
 	$(document).ready( app.init );
 
+	app._3d = function( $cube, size ) {
 
-	app.m3d = function( $cube ) {
-		var m3d = { $cube : $cube };
+		var _3d = {};
 
-		m3d.init = (function(){
-			if ( true === m3d.initDone ){ return; }
-			m3d.setupScene();
+		_3d.loadDataAttributes = function() {
+			var data = $cube.data();
+			_3d.cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xcccccc } );
 
-			m3d.addCube();
-			m3d.addLights();
-			m3d.update();
-			m3d.initDone = true;
+			if ( data.img ) {
+				_3d.cubeMaterial.map = THREE.ImageUtils.loadTexture( data.img );
+			}
+
+			if ( data.color ) {
+				_3d.cubeMaterial.color = new THREE.Color( data.color );
+			}
+
+		};
+
+		_3d.setupScene = function() {
+			_3d.renderer = new THREE.WebGLRenderer( { alpha: true } );
+			_3d.renderer.setSize( size, size );
+			_3d.renderer.setClearColor( 0x000000, 0 );
+
+			$cube.append( _3d.renderer.domElement );
+
+			_3d.camera = new THREE.PerspectiveCamera( 45, size /
+				size, 1, 1000 );
+			_3d.camera.position.set( 0, 0, 5 );
+
+			_3d.scene = new THREE.Scene();
+		};
+
+		_3d.update = function() {
+			_3d.cube.rotation.y += 0.01;
+			_3d.cube.rotation.x += 0.01;
+
+			requestAnimationFrame( _3d.update );
+			_3d.renderer.render( _3d.scene, _3d.camera );
+		};
+
+		_3d.addCube = function() {
+			_3d.cube = new THREE.Mesh( new THREE.BoxGeometry( 2, 2, 2 ), _3d.cubeMaterial );
+			_3d.scene.add( _3d.cube );
+		};
+
+		_3d.addLights = function() {
+			_3d.ambientLight = new THREE.AmbientLight( 0x333333 );
+			_3d.scene.add( _3d.ambientLight );
+
+			_3d.directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+			_3d.directionalLight.position.set( 1, 1, 2 ).normalize();
+			_3d.scene.add( _3d.directionalLight );
+		};
+
+		_3d.init = (function() {
+			if ( true === _3d.initDone ){
+				return;
+			}
+			_3d.setupScene();
+			_3d.loadDataAttributes();
+
+			_3d.addCube();
+			_3d.addLights();
+			_3d.update();
+			_3d.initDone = true;
 		})();
 
-		m3d.setupScene = function() {
-			m3d.scene = new THREE.Scene();
-			m3d.camera = new THREE.PerspectiveCamera( 75, window.innerWidth /
-				window.innerHeight, 0.1, 1000 );
-			m3d.camera.position.set( 0, 0, 5 );
-			m3d.renderer = new THREE.WebGLRenderer();
-			m3d.renderer.setSize( window.innerWidth, window.innerHeight );
-			m3d.$cube.append( m3d.renderer.domElement );
-		};
-
-		m3d.update = function() {
-			m3d.cube.rotation.y += 0.01;
-			m3d.cube.rotation.x += 0.01;
-
-			requestAnimationFrame( m3d.update );
-			m3d.renderer.render( m3d.scene, m3d.camera );
-		};
-
-		m3d.addCube = function() {
-			var geometry = new THREE.CubeGeometry( 1, 1, 1 );
-
-			var material = new THREE.MeshPhongMaterial( { color: 0xcccccc } );
-
-			m3d.cube = new THREE.Mesh( geometry, material );
-			m3d.scene.add( m3d.cube );
-		};
-
-		m3d.addLights = function() {
-			m3d.directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
-			m3d.directionalLight.position.set( 0.3, 1, 1 ).normalize();
-			m3d.scene.add( m3d.directionalLight );
-
-			m3d.ambientLight = new THREE.AmbientLight( 0x333333 );
-			m3d.scene.add( m3d.ambientLight );
-		};
-
-		return m3d;
+		return _3d;
 	};
 
 	return app;
