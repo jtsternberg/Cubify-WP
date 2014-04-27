@@ -20,6 +20,7 @@ window.Cubify_WP = (function(window, document, $, undefined){
 
 	app.cacheSelectors = function() {
 		_$.cubes = $('.cubify-wp');
+		_$.imgs  = $('.entry-content img');
 	};
 
 	app.init = function() {
@@ -34,7 +35,7 @@ window.Cubify_WP = (function(window, document, $, undefined){
 		_$.cubes.each( function() {
 			$cube = $(this);
 			// get percentage attribute
-			var percentage = $cube.data( 'percentage' );
+			var percentage = parseInt( $cube.data( 'percentage' ), 10 );
 			// calculate width
 			w = Math.round( ( $cube.parent().width() * percentage ) / 100 );
 			// Set cube width/height
@@ -42,6 +43,20 @@ window.Cubify_WP = (function(window, document, $, undefined){
 			$cube.height( w );
 			// Init threejs 3d object
 			new app._3d( $cube, w );
+		});
+
+		_$.imgs.each( function() {
+			var $this = $(this);
+			$cube = $this.after('<div></div>').siblings( "div" );
+
+			$cube.data( 'img', $this.attr('src') );
+			$cube.addClass( $this.attr('class') );
+
+			w = $this.width();
+
+			new app._3d( $cube, w );
+
+			$this.hide();
 		});
 	};
 
@@ -63,10 +78,6 @@ window.Cubify_WP = (function(window, document, $, undefined){
 				_3d.cubeMaterial.color = new THREE.Color( data.color );
 			}
 
-			if ( data.speed ) {
-				_3d.speed = data.speed;
-			}
-
 		};
 
 		_3d.setupScene = function() {
@@ -84,8 +95,8 @@ window.Cubify_WP = (function(window, document, $, undefined){
 		};
 
 		_3d.update = function() {
-			_3d.cube.rotation.y += 0.01 * _3d.speed;
-			_3d.cube.rotation.x += 0.01 * _3d.speed;
+			_3d.cube.rotation.y += 0.01;
+			_3d.cube.rotation.x += 0.01;
 
 			requestAnimationFrame( _3d.update );
 			_3d.renderer.render( _3d.scene, _3d.camera );
