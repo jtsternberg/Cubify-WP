@@ -1,4 +1,4 @@
-/*! Cubify WP - v0.1.0 - 2014-04-27
+/*! Cubify WP - v0.1.0 - 2014-05-02
  * http://webdevstudios.com
  * Copyright (c) 2014; * Licensed GPLv2+ */
 window.Cubify_WP = (function(window, document, $, undefined){

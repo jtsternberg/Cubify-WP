@@ -30,12 +30,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/**
- * Built using grunt-wp-plugin
- * Copyright (c) 2013 10up, LLC
- * https://github.com/10up/grunt-wp-plugin
- */
-
 // Useful global constants
 define( 'CUBIFY_WP_URL', plugin_dir_url( __FILE__ ) );
 define( 'CUBIFY_WP_PATH', dirname( __FILE__ ) . '/' );
