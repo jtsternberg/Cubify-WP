@@ -1,5 +1,5 @@
 === Cubify WP ===
-Contributors:      jtsternberg
+Contributors:      jtsternberg, camdensegal
 Donate link:       http://webdevstudios.com
 Tags:
 Requires at least: 3.6.0
