@@ -3,7 +3,7 @@ Contributors:      jtsternberg, camdensegal
 Donate link:       http://webdevstudios.com
 Tags:
 Requires at least: 3.6.0
-Tested up to:      3.6.0
+Tested up to:      3.9.0
 Stable tag:        0.1.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
@@ -43,7 +43,7 @@ Use a shortcode. `[cubify img=/wp-content/plugins/cubify-wp/images/wat.png perce
 = What makes these magical cubes so beautiful? =
 [Three.js](http://threejs.org/ "A JavaScript 3D Library which makes WebGL simpler") A JavaScript 3D Library which makes WebGL simpler.
 
-= Does this plugin serve any practical purpose?
+= Does this plugin serve any practical purpose? =
 Cubify-WP is for fun of course! That's pretty practical, right?
 
 == Screenshots ==
