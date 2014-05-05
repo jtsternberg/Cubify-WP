@@ -16,7 +16,9 @@ Because you always wanted floating 3d cubes of your images in your WordPress con
 
 ### Shortcode Instructions
 
-1. Use the shortcode in your WordPress content. Something like `[cubify img=/wp-content/plugins/cubify-wp/images/wat.png percentage=50 class=alignright speed=2]`. **Note:** Only images on the same server can be used, so best to use images in your media library.
+1. Use the shortcode in your WordPress content. Something like:
+	`[cubify img=/wp-content/plugins/cubify-wp/images/wat.png percentage=50 class=alignright speed=2]`
+	**Note:** Only images on the same server can be used, so best to use images in your media library.
 2. Smile
 3. Share
 
