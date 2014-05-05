@@ -12,7 +12,7 @@ Cubify your content
 
 == Description ==
 
-Because you always wanted floating 3d cubes of your images in your WordPress content.
+Because you always wanted floating 3D cubes in your WordPress content.
 
 ### Shortcode Instructions
 
@@ -22,11 +22,11 @@ Because you always wanted floating 3d cubes of your images in your WordPress con
 
 ### Shortcode Parameters
 
-* img - Image url to cubify,
-* color - Box color,
-* speed - Spin speed,
-* class - Default is `alignleft`, but feel free to use any you want, including `aligncenter`, and `alignright`
-* percentage - Width of content
+* img        - Image URL
+* color      - Box color
+* speed      - Spin speed
+* class      - Default is `alignleft`, but feel free to align with: `aligncenter`, `alignright`, or set your own custom class
+* percentage - Width of the cube in relation to content
 
 == Installation ==
 
@@ -39,6 +39,18 @@ Because you always wanted floating 3d cubes of your images in your WordPress con
 
 = How do I insert cubes into my content? =
 Use a shortcode. `[cubify img=/wp-content/plugins/cubify-wp/images/wat.png percentage=50 class=alignright speed=2]`
+
+= Shortcode Parameters =
+
+* img        - Image URL
+* color      - Box color
+* speed      - Spin speed
+* class      - Default is `alignleft`, but feel free to align with: `aligncenter`, `alignright`, or set your own custom class
+* percentage - Width of the cube in relation to content
+
+= Where should I upload images? =
+
+Cubify-WP only works if the images you upload are on your server. Just use the WordPress media uploader, and then copy/paste the URL into the shortcode.
 
 = What makes these magical cubes so beautiful? =
 [Three.js](http://threejs.org/ "A JavaScript 3D Library which makes WebGL simpler") A JavaScript 3D Library which makes WebGL simpler.
