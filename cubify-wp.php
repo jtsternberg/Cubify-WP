@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cubify WP
  * Plugin URI:  http://webdevstudios.com
- * Description: Cubify your content
+ * Description: Cubify your content by using a shortcode: [cubify img=/wp-content/plugins/cubify-wp/images/wat.png percentage=50 class=alignright speed=2]
  * Version:     0.1.0
  * Author:      WebDevStudios
  * Author URI:  http://webdevstudios.com
